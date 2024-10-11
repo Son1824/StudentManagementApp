@@ -22,15 +22,15 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Enter the number of students: ");
+                    System.out.print("Enter the number of students: ");
                     int num = sc.nextInt();
                     for (int i = 0; i < num; i++) {
-                        System.out.println("Enter id: ");
+                        System.out.print("Enter id: ");
                         int id = sc.nextInt();
                         sc.nextLine();
-                        System.out.println("Enter name: ");
+                        System.out.print("Enter name: ");
                         String name = sc.nextLine();
-                        System.out.println("Enter marks: ");
+                        System.out.print("Enter marks: ");
                         double marks = sc.nextDouble();
                         studentManagement.addStudent(new Student(id, name, marks));
                         System.out.println("Add successfully!");
@@ -38,12 +38,12 @@ public class Main {
                     break;
 
                 case 2:
-                    System.out.println("Enter id to edit: ");
+                    System.out.print("Enter id to edit: ");
                     int editID = sc.nextInt();
                     sc.nextLine();
-                    System.out.println("Edit name: ");
+                    System.out.print("Edit name: ");
                     String editName = sc.nextLine();
-                    System.out.println("Edit marks: ");
+                    System.out.print("Edit marks: ");
                     double editMarks = sc.nextDouble();
                     studentManagement.editStudent(editID, editName, editMarks);
                     break;
