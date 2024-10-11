@@ -33,7 +33,6 @@ public class Main {
                         System.out.print("Enter marks: ");
                         double marks = sc.nextDouble();
                         studentManagement.addStudent(new Student(id, name, marks));
-                        System.out.println("Add successfully!");
                     }
                     break;
 
