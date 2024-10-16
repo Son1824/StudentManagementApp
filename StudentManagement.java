@@ -1,61 +1,107 @@
 package StudentManagementApp;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Stack;
 
 public class StudentManagement {
-    List<Student> studentList = new ArrayList<>();
+    private StudentStack studentStack;
+    public StudentManagement(){
+        studentStack = new StudentStack();
+    }
     public void addStudent(Student student){
-        for (Student s : studentList) {
-            if (s.getId() == student.getId()) {
-                System.out.println("ID already exists.");
-                return;
+        studentStack.push(student);
+    }
+    public void updateStudent(int id, String newName, double newMark){
+        StudentStack tempStack = new StudentStack();
+        boolean found = false;
+
+        while (!studentStack.isEmpty()){
+            Student student = studentStack.pop();
+            if(student.getId() == id){
+                student.setName(newName);
+                student.setMark(newMark);
+                found = true;
             }
+            tempStack.push(student);
         }
-        studentList.add(student);
-        System.out.println("Student added successfully!");
-     }
-     public List<Student> getStudents() {
-        return studentList;
+
+        while (!tempStack.isEmpty()){
+            studentStack.push(tempStack.pop());
+        }
+
+        if (!found) {
+            System.out.println("Not found student with id: " + id);
+        }
+    }
+    public void peekStudent() {
+        Student topStudent = studentStack.peek();
+        if (topStudent != null) {
+            System.out.println("Top student: " + topStudent);
+        }
     }
 
-    public void editStudent(int id, String name, double marks) {
+    public void deleteStudentByID(int id){
+        StudentStack tempStack = new StudentStack();
         boolean found = false;
-        for (Student student : studentList) {
-            if (student.getId() == id) {
+
+        while (!studentStack.isEmpty()){
+            Student student = studentStack.pop();
+            if(student.getId() == id){
                 found = true;
-                student.setName(name);
-                student.setMarks(marks);
-                System.out.println("ID has been updated.");
-                return;
+                System.out.println("Deleted student: " + student);
+            }else {
+                tempStack.push(student);
             }
+        }
+        while (!tempStack.isEmpty()){
+            studentStack.push(tempStack.pop());
+        }
+        if(!found){
+            System.out.println("Not found student with id: " + id);
+        }
+    }
+
+    public void sortByMark() {
+        if (studentStack.isEmpty()) {
+            System.out.println("Stack is empty. No students to sort.");
+            return;
+        }
+
+        StudentStack sortedStack = new StudentStack();
+        while (!studentStack.isEmpty()) {
+            Student temp = studentStack.pop();
+
+            while (!sortedStack.isEmpty() && sortedStack.peek().getMark() > temp.getMark()) {
+                studentStack.push(sortedStack.pop());
+            }
+            sortedStack.push(temp);
+        }
+
+        while (!sortedStack.isEmpty()) {
+            studentStack.push(sortedStack.pop());
+        }
+        System.out.println("Students sorted by marks.");
+    }
+
+    public void searchStudentByName(String name) {
+        Node current = studentStack.top;
+        boolean found = false;
+
+        while (current != null) {
+            if (current.student.getName().equalsIgnoreCase(name)) {
+                System.out.println("Found student: " + current.student);
+                found = true;
+            }
+            current = current.next;
         }
         if (!found) {
-            System.out.println("ID not found.");
+            System.out.println("No student found with name: " + name);
         }
     }
-
-    public void deleteStudent(int id){
-        boolean removed = studentList.removeIf(student -> student.getId() == id);
-        if (removed) {
-            System.out.println("ID has been deleted.");
-        } else {
-            System.out.println("ID not found.");
+    public void displayStudents() {
+        if (studentStack.isEmpty()) {
+            System.out.println("No students in the stack.");
+            return;
         }
+        studentStack.displayStudents();
     }
-    public List<Student> sortStudents() {
-        studentList.sort(Comparator.comparingDouble(Student::getMarks));
-        return studentList;
-    }
-
-    public Student searchStudent(int id) {
-        for (Student student : studentList) {
-            if (student.getId() == id) {
-                return student;
-            }
-        }
-        return null;
-    }
-
 }
